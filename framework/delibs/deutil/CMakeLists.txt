@@ -32,7 +32,7 @@ include_directories(
 	../depool
 	)
 
-if (DE_OS_IS_UNIX)
+if (DE_OS_IS_UNIX AND NOT CMAKE_SYSTEM_NAME STREQUAL "NintendoSwitch")
 	set(DEUTIL_LIBS ${DEUTIL_LIBS} rt dl)
 endif ()
 

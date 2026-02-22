@@ -36,7 +36,7 @@
 #include <unistd.h>
 #include <pthread.h>
 #include <sched.h>
-#if (DE_OS == DE_OS_UNIX) || (DE_OS == DE_OS_ANDROID)
+#if ((DE_OS == DE_OS_UNIX) || (DE_OS == DE_OS_ANDROID)) && !defined(__SWITCH__)
 #include <sys/syscall.h>
 #endif
 
@@ -161,7 +161,7 @@ void deYield(void)
     sched_yield();
 }
 
-#if (DE_OS == DE_OS_UNIX) || (DE_OS == DE_OS_ANDROID)
+#if ((DE_OS == DE_OS_UNIX) || (DE_OS == DE_OS_ANDROID)) && !defined(__SWITCH__)
 
 uint32_t deGetNumAvailableLogicalCores(void)
 {

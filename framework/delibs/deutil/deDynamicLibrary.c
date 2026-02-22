@@ -24,7 +24,33 @@
 #include "deDynamicLibrary.h"
 #include "deMemory.h"
 
-#if (DE_OS == DE_OS_UNIX) || (DE_OS == DE_OS_ANDROID) || (DE_OS == DE_OS_OSX) || (DE_OS == DE_OS_SYMBIAN) || \
+#if defined(__SWITCH__)
+/* Nintendo Switch stub — no dynamic linking, everything is statically linked. */
+
+struct deDynamicLibrary_s
+{
+    int dummy;
+};
+
+deDynamicLibrary *deDynamicLibrary_open(const char *fileName)
+{
+    DE_UNREF(fileName);
+    return NULL;
+}
+
+void deDynamicLibrary_close(deDynamicLibrary *library)
+{
+    deFree(library);
+}
+
+deFunctionPtr deDynamicLibrary_getFunction(const deDynamicLibrary *library, const char *symbolName)
+{
+    DE_UNREF(library);
+    DE_UNREF(symbolName);
+    return NULL;
+}
+
+#elif (DE_OS == DE_OS_UNIX) || (DE_OS == DE_OS_ANDROID) || (DE_OS == DE_OS_OSX) || (DE_OS == DE_OS_SYMBIAN) || \
     (DE_OS == DE_OS_IOS) || (DE_OS == DE_OS_QNX) || (DE_OS == DE_OS_FUCHSIA)
 /* Posix implementation. */
 

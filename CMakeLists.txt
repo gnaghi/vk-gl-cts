@@ -339,6 +339,11 @@ endmacro (target_copy_files)
 set(MODULE_LIB_TARGET_POSTFIX	"-package")
 set(MODULE_DATA_TARGET_POSTFIX	"-data")
 
+# Platform-specific main() source file (can be overridden by target .cmake)
+if (NOT DEFINED DEQP_PLATFORM_MAIN_SRC)
+	set(DEQP_PLATFORM_MAIN_SRC "${PROJECT_SOURCE_DIR}/framework/platform/tcuMain.cpp")
+endif ()
+
 # Macro for adding dEQP module
 # This adds 3 targets:
 #	${MODULE_NAME}-package:		Static library that contains all SRCS and links to LIBS
@@ -359,7 +364,7 @@ macro (add_deqp_module MODULE_NAME SRCS LIBS EXECLIBS ENTRY)
 
 	if (NOT DEQP_ANDROID_APP AND NOT DE_OS_IS_IOS)
 		# Executable target
-		add_executable(${MODULE_NAME} ${PROJECT_SOURCE_DIR}/framework/platform/tcuMain.cpp ${ENTRY})
+		add_executable(${MODULE_NAME} ${DEQP_PLATFORM_MAIN_SRC} ${ENTRY})
 		target_link_libraries(${MODULE_NAME} PUBLIC "${EXECLIBS}" "${MODULE_NAME}${MODULE_LIB_TARGET_POSTFIX}")
 		target_copy_files(${MODULE_NAME} platform-libs-${MODULE_NAME} "${DEQP_PLATFORM_COPY_LIBRARIES}")
 	endif ()
@@ -381,7 +386,7 @@ macro (add_deqp_module_skip_android MODULE_NAME SRCS LIBS EXECLIBS ENTRY)
 
 	if (NOT DEQP_ANDROID_APP AND NOT DE_OS_IS_IOS)
 		# Executable target
-		add_executable(${MODULE_NAME} ${PROJECT_SOURCE_DIR}/framework/platform/tcuMain.cpp ${ENTRY})
+		add_executable(${MODULE_NAME} ${DEQP_PLATFORM_MAIN_SRC} ${ENTRY})
 		target_link_libraries(${MODULE_NAME} PUBLIC "${EXECLIBS}" "${MODULE_NAME}${MODULE_LIB_TARGET_POSTFIX}")
 		target_copy_files(${MODULE_NAME} platform-libs-${MODULE_NAME} "${DEQP_PLATFORM_COPY_LIBRARIES}")
 	endif ()
